@@ -1,0 +1,26 @@
+library(ggplot2)
+data <- read.csv('C:/Users/user/Desktop/Score_2.csv')
+
+
+
+# Score_2 Text파일을 csv파일로 변환하고, eng, math에 대한 Boxplot을 그리시오.
+
+df <- data.frame(
+  X = c(rep("eng", 100), rep("math", 100)), 
+  Y = c(rnorm(100, mean = 0, sd = 1), rnorm(100, mean = 2, sd = 1))
+)
+ggplot(df, aes(x = X, y = Y)) +
+  geom_boxplot(fill = c("lightblue", "lightgreen"), outlier.color = "red") +
+  labs(title = "Boxplot") +
+  xlab("X") +
+  ylab("Y")
+
+# 모집단이 정규분포를 따를 때, 모집단의 평균이 60, 표준편차가 10일 경우 
+# 이 모집단에서 크기 40개의 표본 집단 B를 추출했을 때, 표본 평균이 55보다 작을 확률은?
+
+
+
+# 한 커피 전문점에서 판매하는 아메리카노 한 잔의 카페인 함량은 평균 150mg, 표준편차 20mg인 정규분포를 따른다. 
+# 이 커피숍의 품질관리팀은 당일 생산된 아메리카노 중 무작위로 36잔을 샘플링 하여 카페인 함량을 측정했는데, 
+# 표본 평균이 143mg이하일 확률은?
+
