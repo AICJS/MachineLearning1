@@ -1,0 +1,62 @@
+observed <- matrix(c(25, 15, 20, 30, 35, 25, 15, 20 ,15), nrow = 3, byrow = TRUE)
+
+rownames(observed) <- c("Red", "Blue", "Green")
+colnames(observed) <- c("Chocolate", "Vanilla", "Strawberry")
+chi_squared <- chisq.test(observed)
+print(chi_squared)
+
+##########################
+data <- data.frame(Gender = c("Male", "Female", "Male", "Male", "Female", "Female", "Male", "Male", "Female", "Female"), 
+                   Food = c("국밥", "마라탕", "국밥", "피자", "피자", "국밥", "국밥", "마라탕", "피자", "피자"))
+
+cross_tab <- table(data$Gender, data$Food)
+cross_tab
+
+chi_squared_test_result <- chisq.test(cross_tab)
+print(chi_squared_test_result)
+
+##########################
+data <- read.csv("C:/Users/pc502/Desktop/gender_food.csv")
+
+cross_tab <- table(data$Gender, data$Food)
+cross_tab
+
+chi_squared_test_result <- chisq.test(cross_tab)
+print(chi_squared_test_result)
+
+##########################
+library(chisq.posthoc.test)
+
+cross_tab <- table(data$Gender, data$Food)
+cross_tab
+
+results <- chisq.posthoc.test(cross_tab, method = "bonferroni")
+results
+
+#조합 공식 #choose(3, 2)
+choose(n, k)
+
+##########################
+#카이제곱 분석 #부부와 집안일은 관련성이 있다/없다
+data = read.csv("C:/Users/pc502/Desktop/housetasks.csv", row.names = 1)
+chi_squared_test_result <- chisq.test(data)
+print(chi_squared_test_result)
+
+#사후검증
+results <- chisq.posthoc.test(data, method = "bonferroni")
+results
+
+#시각화
+library(corrplot)
+corrplot(chi_squared_test_result$residuals, is.cor = FALSE)
+##########################
+data <- read.csv("C:/Users/pc502/Desktop/Adoptable_Pets.csv")
+
+cross_tab <- table(data[, 5], data[, 7])
+cross_tab
+
+chi_squared_test_result <- chisq.test(cross_tab)
+print(chi_squared_test_result)
+
+results <- chisq.posthoc.test(cross_tab, method = "bonferroni")
+results
