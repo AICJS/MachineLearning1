@@ -1,0 +1,36 @@
+library(chisq.posthoc.test)
+
+
+
+# color.csv파일에서 색깔 변수에 포함된 요소들이 적합하게 분포되어 있는지 확인하고, 
+# 어떤 요소들이 적합하지 않은지(많거나, 적은지) 판단하시오.(유의수준 95%)
+
+data = read.csv("C:/Users/pc502/Desktop/color.csv")
+
+cross_tab <- table(data)
+cross_tab
+
+chi_squared_test_result <- chisq.test(cross_tab)
+print(chi_squared_test_result)
+
+results <- chisq.posthoc.test(cross_tab, method = "bonferroni")
+results
+
+
+
+# incafe.csv파일에서 카페의 분위기가 고객의 만족도에 관련성이 있는지를 판단하고, 
+# 관련성이 있다면 어떠한 요소들이 카페의 만족도를 높이는데 영향을 주는지를 판단하시오.(유의수준 95%)
+
+data = read.csv("C:/Users/pc502/Desktop/incafe.csv")
+
+cross_tab <- table(data)
+cross_tab
+
+chi_squared_test_result <- chisq.test(cross_tab)
+print(chi_squared_test_result)
+
+results <- chisq.posthoc.test(cross_tab, method = "bonferroni")
+results
+
+
+
