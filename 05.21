@@ -1,15 +1,90 @@
+library(chisq.posthoc.test)
+
 # 1. 데이터 불러오기
-data <- read.csv("file.csv", stringsAsFactors =  = TRUE)
+data <- read.csv("C:/Users/PC502/Desktop/class_scores.csv", stringsAsFactors = TRUE)
 
 # 2. ANOVA 분석
 anova_result <- aov(Score ~ Class, data = data)
 
 # 3. 분석 결과 출력
-summary(anova_result)
+summary(anova_result) # P-value[Pr(>F)]가 0.5 보다 작기 때문에 귀무가설을 안 하고 대립가설 시행
 
 # 4. 사후검증 출력
 library(multcomp) # 사후검정
 
 tukey_result <- glht(anova_result, linfct = mcp(Class = "Tukey"))
+summary(tukey_result) # P-Value[Pr(>|t|)]가 0.5 보다 작다
+
+# 사후검정을 안 할 때 : 귀무가설을 채택했을 때
+
+
+
+grow <- read.csv("C:/Users/PC502/Desktop/growth.csv", stringsAsFactors = TRUE) # 문자형 변수를 요소로 변환
+
+# 이원분산분석(독립변수들간 상호작용 X)
+anova_result <- aov(growth ~ fertilizer + water, data = grow)
+summary(anova_result)
+
+# 이원분산분석(독립변수들간 상호작용 O)
+anova_result <- aov(growth ~ fertilizer * water, data = grow)
+summary(anova_result)
+
+
+
+library(car) # 등분산검정
+library(rstatix) # games_howell_test
+
+# P-Value < 0.05 일 때, games-howell 검증사용가능(등분산검정을 통해 등분산이 아닐 경우)
+# 사후검정(fertilizer)
+leveneTest(growth ~ fertilizer, data = grow)
+
+tukey_result <- glht(anova_result, linfct = mcp(fertilizer = "Tukey"))
+games_howell_test(grow, growth ~ fertilizer)
+# A B / A C / B C 이렇게 나타나는데
+# B-A / C-A / C-A 이렇게 보면 됨
+# C, B, A 순으로 큰거임 p.adj 값이 양수니까 큰수에서 작은수를 뺀거니까
+
+
+# 사후검정(water)
+leveneTest(growth ~ water, data = grow)
+
+tukey_result <- glht(anova_result, linfct = mcp(water = "Tukey"))
+games_howell_test(grow, growth ~ water)
+# 마찬가지로 High / Low 가 Low - High 로 보고 음수로 되어 있음
+# High 할때 grow의 값은 커진다
+# 결론은 관계가 있다
+
+
+
+# 사후검정(fertilizer * water)
+# 교호(상호)작용 하나의 그룹 변수로 통합
+
+grow$group <- interaction(grow$fertilizer, grow$water) # 변수 묶어서 하나의 변수로 만들어 줌
+group_mode1 <- aov(growth ~ group, data = grow)
+
+leveneTest(growth ~ group, data = grow) # 귀무가설 기각 시(P-Value < 0.05), games_howell 검증 사용 가능
+
+tukey_result <- glht(group_mode1, linfct = mcp(group = "Tukey"))
 summary(tukey_result)
 
+games_howell_test(grow, growth ~ group)
+
+
+
+cafe1 <- read.csv("C:/Users/PC502/Desktop/cafe.csv", stringsAsFactors = TRUE)
+
+# 분산분석
+# 종속변수(만족도), 독립변수(커피타입, 분위기, 자리)
+# 만족 ~ 타입 + 분위기 + 자리
+cafe$Satisfaction <- interaction(cafe1$CoffeeType, cafe1$CafeMood, cafe1$SeatLocation)
+cafe_Satisfaction <- aov(CoffeeType ~ SeatLocation, data = cafe1)
+
+leveneTest(CoffeeType ~ SeatLocation, data = cafe1)
+
+# 사후검증(Tukey)
+tukey_result <- glht(cafe_Satisfaction, linfct = mcp(SeatLocation = "Tukey"))
+summary(tukey_result)
+
+games_howell_test(cafe1, CoffeeType ~ SeatLocation)
+
+# 카페 손님들의 만족도에 좋은 영향을 미치는 각 변수 별 항목들은 무엇인가?
