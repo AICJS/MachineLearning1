@@ -1,0 +1,15 @@
+# 1. 데이터 불러오기
+data <- read.csv("file.csv", stringsAsFactors =  = TRUE)
+
+# 2. ANOVA 분석
+anova_result <- aov(Score ~ Class, data = data)
+
+# 3. 분석 결과 출력
+summary(anova_result)
+
+# 4. 사후검증 출력
+library(multcomp) # 사후검정
+
+tukey_result <- glht(anova_result, linfct = mcp(Class = "Tukey"))
+summary(tukey_result)
+
