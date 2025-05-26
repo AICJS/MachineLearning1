@@ -1,0 +1,28 @@
+library(chisq.posthoc.test)
+library(multcomp)
+library(car)
+library(rstatix) 
+
+# youtube.csv 파일을 활용해 ViewerCount(종속변수)에 영향을 미치는 독립변수들을 찾고, 
+# 독립변수들의 요소들을 토대로 어떠한 조건일 때, ViewCount가 가장 높은지에 대해 서술하시오.
+# 독립변수가 유의한 결과가 나오더라도 사후검증에서 요소들이 모두 유의하지 않을 수도 있음.
+# (전체 분산을 크지만 요소 쌍의 차이는 작을 수 있기 때문)
+
+youtube_data <- read.csv("C:/Users/PC502/Desktop/youtube.csv", stringsAsFactors = TRUE)
+
+# 분산분석
+# 종속변수(시청자), 독립변수(컨텐츠 타입, 썸네일 타입, 업로드 시간)
+# 시청자 ~ 컨텐츠 + 썸네일 + 시간
+youtube_data$group <- interaction(youtube_data$ContentType, youtube_data$ThumbnailType, youtube_data$UploadTime)
+# ANOVA 분석
+anova_result <- aov(ViewerCount ~ group, data = youtube_data)
+# 분석 결과
+summary(anova_result)
+
+leveneTest(ViewerCount ~ group, data = youtube_data)
+
+# 사후검증(Tukey)
+tukey_result <- glht(anova_result, linfct = mcp(group = "Tukey"))
+summary(tukey_result)
+
+games_howell_test(youtube_data, ViewerCount ~ group)
