@@ -1,7 +1,7 @@
 library(chisq.posthoc.test)
 library(multcomp)
 library(car)
-library(rstatix) 
+library(rstatix)
 
 # youtube.csv 파일을 활용해 ViewerCount(종속변수)에 영향을 미치는 독립변수들을 찾고, 
 # 독립변수들의 요소들을 토대로 어떠한 조건일 때, ViewCount가 가장 높은지에 대해 서술하시오.
