@@ -1,0 +1,61 @@
+# 키와 몸무게 데이터 생성
+heights <- c(160, 162, 155, 180, 170, 175, 165, 171, 177, 172)
+weights <- c(55, 69, 53, 72, 70, 73, 62, 64, 69, 65)
+
+library(psych)
+# 피어슨상관계수 도출 및 p-value
+result_pearson = corr.test(heights, weights, method = "pearson")
+
+result_pearson$p # p-value
+result_pearson$r # 상관관계 계수
+
+########################################################################
+
+# 학생의 자기평가 (순위형 : 1 = 매우 낮음, 5 = 매우 높음)
+s_eval <- c(3, 4, 2, 5, 1, 4, 3, 2, 5, 3)
+
+# 평가자의 평가 (순위형 : 1 = 매우 낮음, 5 = 매우 높음)
+e_eval <- c(2, 5, 2, 4, 1, 4, 3, 2, 5, 3)
+
+# 스피어만 상관계수 도출 및 p-value
+result_pearson = corr.test(s_eval, e_eval, method = "spearman")
+
+result_pearson$p # p-value
+result_pearson$r # 상관관계 계수
+
+########################################################################
+
+indep_vars <- data[, c("독립변수1", "독립변수2", "독립변수3", "독립변수4")]
+
+# 종속변수 (연속형)
+target_var <- data[, "종속변수", drop = FALSE] # drop = FALSE(데이터프레임 유지)
+
+########################################################################
+
+data_pearson = read.csv("C:/Users/PC502/Desktop/pearson.csv")
+
+result_pearson_sleep = corr.test(data_pearson$집중력점수, data_pearson$수면시간, method = "pearson")
+result_pearson_sleep$p
+result_pearson_sleep$r
+
+result_pearson_phone = corr.test(data_pearson$집중력점수, data_pearson$휴대폰사용시간, method = "pearson")
+result_pearson_phone$p
+result_pearson_phone$r
+
+result_pearson_coffeine = corr.test(data_pearson$집중력점수, data_pearson$카페인섭취량, method = "pearson")
+result_pearson_coffeine$p
+result_pearson_coffeine$r
+
+result_pearson_health = corr.test(data_pearson$집중력점수, data_pearson$운동시간, method = "pearson")
+result_pearson_health$p
+result_pearson_health$r
+
+indep_vars <- data_pearson[, c("수면시간", "휴대폰사용시간", "카페인섭취량", "운동시간")]
+target_var <- data[, "집중력점수", drop = FALSE]
+
+
+
+data_spearman = read.csv("C:/Users/PC502/Desktop/spearman.csv")
+
+indep_vars <- data_spearman[, c("스트레스수준", "자기효능감", "학교만족도", "가족지원수준", "소속감수준")]
+target_var <- data[, "집중력등급", drop = FALSE]
